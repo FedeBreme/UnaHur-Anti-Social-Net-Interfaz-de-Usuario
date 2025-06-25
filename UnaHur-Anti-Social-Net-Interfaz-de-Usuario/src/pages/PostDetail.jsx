@@ -1,16 +1,23 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import '../Styles/PostDetails.css';
+import imagen2 from "../Imagenes/tralaleroTralala.jpg";
+import imagen1 from "../Imagenes/NocheLifeder16.jpg";
 
 function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
 
+  const imagenes = [imagen1, imagen2];
+
   useEffect(() => {
-    async function fetchPost() {
+    async function cargarPost() {
       try {
         const res = await fetch(`http://localhost:3001/posts/${id}`);
-        if (!res.ok) throw new Error("Error al cargar el post");
+        if (!res.ok) {
+          throw new Error("No se pudo cargar el post");
+        }
         const data = await res.json();
         setPost(data);
       } catch (err) {
@@ -18,65 +25,59 @@ function PostDetail() {
       }
     }
 
-    fetchPost();
+    cargarPost();
   }, [id]);
 
-  if (error) return <div>Error: {error}</div>;
-  if (!post) return <div>Cargando post...</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!post) {
+    return <div>Cargando post...</div>;
+  }
+
+  const imagen = imagenes[parseInt(id) % imagenes.length];
 
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-      <h2>{post.title}</h2>
-      <p>{post.description}</p>
+    <div className="post-container">
+      <div className="header-post">
+        <span className="user-name">{post.User?.nickName}</span>
+        <h2 className="post-title">{post.title}</h2>
+      </div>
 
-      {post.images?.length > 0 && (
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "1rem" }}>
-          {post.images.map((img, i) => (
-            <img
-              key={i}
-              src={img}
-              alt={`Imagen ${i + 1}`}
-              style={{ width: 150, height: 150, objectFit: "cover", borderRadius: "8px" }}
-            />
+      <p className="post-description">{post.description}</p>
+
+      <div className="image-post">
+        <img className="image-style" src={imagen} alt="Imagen del post" />
+      </div>
+
+      <div className="right-section">
+        <div className="tags-container space">
+          {post.Tags?.map((tag, i) => (
+            <span key={i} className="tag">{tag.name}</span>
           ))}
         </div>
-      )}
 
-      {post.Tags?.length > 0 && (
-        <div style={{ marginBottom: "1rem" }}>
-          {post.Tags.map((tag, i) => (
-            <span
-              key={i}
-              style={{
-                marginRight: 10,
-                backgroundColor: "#e0e0e0",
-                padding: "4px 10px",
-                borderRadius: "20px",
-                fontSize: "0.9rem",
-              }}
-            >
-              {tag.name}
-            </span>
-          ))}
+        <div className="comments-container">
+          <h3>Comentarios ({post.Comments?.length || 0})</h3>
+          {post.Comments?.length > 0 ? (
+            <ul>
+              {post.Comments.map((comment) => (
+                <li key={comment.id}>
+                  <b>{comment.nickName || "Anónimo"}:</b> {comment.text}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No hay comentarios aún.</p>
+          )}
         </div>
-      )}
-
-      <div>
-        <h3>Comentarios ({post.Comments?.length || 0})</h3>
-        {post.Comments?.length > 0 ? (
-          <ul style={{ paddingLeft: "1rem" }}>
-            {post.Comments.map((comment) => (
-              <li key={comment.id} style={{ marginBottom: "0.5rem" }}>
-                <b>{comment.nickName || "Anónimo"}:</b> {comment.text || comment.body || comment.content}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No hay comentarios aún.</p>
-        )}
       </div>
     </div>
   );
 }
 
 export default PostDetail;
+
+
+
