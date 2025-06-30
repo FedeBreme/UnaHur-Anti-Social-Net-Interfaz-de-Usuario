@@ -1,0 +1,22 @@
+.equipoDesarrollo {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: #a5dce4;
+    color: #1e1e1e;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+}
+
+.equipoDesarrollo:hover {
+    background-color: #77b9c4;
+    padding: 1.3rem;
+}
+
+.modo-oscuro .equipoDesarrollo {
+    color: #1e1e1e !important;
+}

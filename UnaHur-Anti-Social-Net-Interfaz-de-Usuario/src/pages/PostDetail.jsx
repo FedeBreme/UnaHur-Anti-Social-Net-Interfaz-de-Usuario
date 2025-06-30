@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import '../Styles/PostDetails.css';
+import VisualAlert from "../Componentes/VisualAlert"; 
 import imagen2 from "../Imagenes/tralaleroTralala.jpg";
 import imagen1 from "../Imagenes/NocheLifeder16.jpg";
 
@@ -15,26 +16,19 @@ function PostDetail() {
     async function cargarPost() {
       try {
         const res = await fetch(`http://localhost:3001/posts/${id}`);
-        if (!res.ok) {
-          throw new Error("No se pudo cargar el post");
-        }
+        if (!res.ok) throw new Error("No se pudo cargar el post");
         const data = await res.json();
         setPost(data);
       } catch (err) {
         setError(err.message);
       }
     }
-
     cargarPost();
   }, [id]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (error) return <VisualAlert mensaje={"Un error inesperado: " + error} />; 
 
-  if (!post) {
-    return <div>Cargando post...</div>;
-  }
+  if (!post) return <div>Cargando post...</div>;
 
   const imagen = imagenes[parseInt(id) % imagenes.length];
 

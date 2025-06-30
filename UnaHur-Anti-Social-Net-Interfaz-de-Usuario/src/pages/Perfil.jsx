@@ -2,8 +2,9 @@ import React from 'react'
 
 function Perfil() {
   return (
-    <div>Perfil
-      <p>Necesito la parte de login jeje</p>
+    <div>
+      <h1>Perfil</h1>
+      <hr></hr>
     </div>
   )
 }
