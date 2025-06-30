@@ -1,5 +1,6 @@
 import React from 'react'
-import LogoUnaHurAntiSocialNet from "../Imagenes/LogoUnaHurAnti-SocialNet.png"
+import { NavLink } from "react-router-dom";
+import LogoUnaHurAntiSocialNet from "../images/LogoUnaHurAnti-SocialNet.png"
 
 function QuienesSomos() {
   return (
@@ -20,6 +21,9 @@ function QuienesSomos() {
             Nuestros objetivos son crear una red <i>sin algoritmos manipuladores</i> ni contenido sponsoreado, 
             promover la <i>libertad de expresión auténtica</i>, sin miedo a no encajar, y fomentar la creatividad, la ironía y el pensamiento crítico en comunidad.
         </p>
+        <NavLink to="/EquipoDesarrollo" className="equipoDesarrollo">
+          Conocé nuestro equipo de desarrollo
+        </NavLink>
     </>
   )
 }

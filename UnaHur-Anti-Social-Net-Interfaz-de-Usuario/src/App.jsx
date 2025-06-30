@@ -1,11 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import './App.css'
-import Header from './Componentes/Header'
+import Header from './components/Header'
 import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
+import Login from "./pages/Login";
 import QuienesSomos from "./pages/QuienesSomos";
 import ComoFunciona from "./pages/ComoFunciona";
-import PostDetail from "./Pages/PostDetail";
+import PostDetail from "./pages/PostDetail";
+import EquipoDesarrollo from "./pages/EquipoDesarrollo";
 
 function App() {
   return <>
@@ -14,9 +16,11 @@ function App() {
       <Route path="/" element={<Navigate to="/Home" />} />
       <Route path="/Home" element={ <Home/> }/>
       <Route path="/Perfil" element={ <Perfil/> }/>
+      <Route path="/Login" element={ <Login/>} />
       <Route path="/QuienesSomos" element={ <QuienesSomos/> }/>
       <Route path="/ComoFunciona" element={ <ComoFunciona/> }/>
       <Route path="/post/:id" element={ <PostDetail />} />
+      <Route path="/EquipoDesarrollo" element={ <EquipoDesarrollo />} />
     </Routes>
   </>
 }

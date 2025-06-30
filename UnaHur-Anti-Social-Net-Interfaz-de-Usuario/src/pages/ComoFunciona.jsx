@@ -1,5 +1,6 @@
 import React from 'react'
-import InstructiveCard from '../Componentes/InstructiveCard'
+import InstructiveCard from '../components/InstructiveCard'
+import '../styles/ComoFunciona.css'
 
 function ComoFunciona() {
   return (
