@@ -1,6 +1,10 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
+<<<<<<< HEAD
 import LogoUnaHurAntiSocialNet from "../Imagenes/LogoUnaHurAnti-SocialNet.png"
+=======
+import LogoUnaHurAntiSocialNet from "../images/LogoUnaHurAnti-SocialNet.png"
+>>>>>>> origin/dev/Franco
 
 function QuienesSomos() {
   return (

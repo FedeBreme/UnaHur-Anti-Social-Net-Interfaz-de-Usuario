@@ -1,4 +1,4 @@
-import '../Styles/InstructiveCard.css'
+import '../styles/InstructiveCard.css'
 
 const InstructiveCard = ({ title, description }) => {
   return (

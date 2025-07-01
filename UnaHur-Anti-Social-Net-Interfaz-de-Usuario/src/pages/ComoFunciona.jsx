@@ -1,6 +1,11 @@
 import React from 'react'
+<<<<<<< HEAD
 import InstructiveCard from '../Componentes/InstructiveCard';
 import '../Styles/ComoFunciona.css';
+=======
+import InstructiveCard from '../components/InstructiveCard'
+import '../styles/ComoFunciona.css'
+>>>>>>> origin/dev/Franco
 
 function ComoFunciona() {
   return (

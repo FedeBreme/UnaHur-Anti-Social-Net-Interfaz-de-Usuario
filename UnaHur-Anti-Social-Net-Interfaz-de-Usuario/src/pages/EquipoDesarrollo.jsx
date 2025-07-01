@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import '../Styles/EquipoDesarrollo.css';
 import Federico from '../Imagenes/Federico.png';
 import Tomas from '../Imagenes/Tomas.jpeg';
+=======
+import '../styles/EquipoDesarrollo.css';
+import Federico from '../images/Federico.png';
+import Tomas from '../images/Tomas.jpeg';
+>>>>>>> origin/dev/Franco
 
 
 function EquipoDesarrollo() {
@@ -36,7 +42,11 @@ function EquipoDesarrollo() {
         <div className="card" style={{ width: "20rem" }}>
           <img src="" className="card-img-top" alt="Franco" />
           <div className="card-body">
+<<<<<<< HEAD
             <h5 className="card-title">Franco Pfahel</h5>
+=======
+            <h5 className="card-title">Franco Pfahler</h5>
+>>>>>>> origin/dev/Franco
             <p className="card-text">Desarrollador BackEnd</p>
             <button onClick={() => setFrancoActivo(!francoActivo)} className="ver-mas">
               {francoActivo ? 'Ocultar descripción' : 'Ver más'}
@@ -65,4 +75,8 @@ function EquipoDesarrollo() {
   );
 }
 
+<<<<<<< HEAD
 export default EquipoDesarrollo;
+=======
+export default EquipoDesarrollo;
+>>>>>>> origin/dev/Franco
