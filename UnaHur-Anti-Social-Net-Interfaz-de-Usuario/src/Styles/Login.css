@@ -1,0 +1,62 @@
+/* === Estilo general del contenedor === */
+.containerSesion {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* === Modo claro === */
+body.modo-claro .containerSesion {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #000;
+}
+
+/* === Modo oscuro === */
+body.modo-oscuro .containerSesion {
+  background-color: rgba(34, 34, 34, 0.95);
+  color: #fff;
+}
+
+/* === Inputs === */
+.containerSesion input[type="text"],
+.containerSesion input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 16px;
+  background-color: inherit;
+  color: inherit;
+}
+
+/* === Botón === */
+.containerSesion button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2a2a72;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.containerSesion button:hover {
+  background-color: #1c1c5a;
+}
+
+/* === Enlace de registro === */
+.containerSesion p {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.containerSesion p a {
+  color: inherit;
+  text-decoration: underline;
+}

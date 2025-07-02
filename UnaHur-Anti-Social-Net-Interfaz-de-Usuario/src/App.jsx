@@ -8,6 +8,7 @@ import QuienesSomos from "./pages/QuienesSomos";
 import ComoFunciona from "./pages/ComoFunciona";
 import PostDetail from "./pages/PostDetail";
 import EquipoDesarrollo from "./pages/EquipoDesarrollo";
+import Register from "./pages/Register"
 
 function App() {
   return <>
@@ -17,6 +18,7 @@ function App() {
       <Route path="/Home" element={ <Home/> }/>
       <Route path="/Perfil" element={ <Perfil/> }/>
       <Route path="/Login" element={ <Login/>} />
+      <Route path="/Register" element={<Register />} />
       <Route path="/QuienesSomos" element={ <QuienesSomos/> }/>
       <Route path="/ComoFunciona" element={ <ComoFunciona/> }/>
       <Route path="/post/:id" element={ <PostDetail />} />

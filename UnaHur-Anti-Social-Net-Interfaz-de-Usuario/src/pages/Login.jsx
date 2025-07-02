@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { API_URL } from "../config";
+import { useNavigate, Link  } from "react-router-dom";
+import "../styles/Login.css";
+import { API_URL} from "../config";
 
 function Login() {
   const { login } = useAuth();
@@ -44,7 +45,7 @@ function Login() {
   };
 
   return (
-    <div className="container">
+    <div className="containerSesion">
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -68,6 +69,9 @@ function Login() {
         {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit">Ingresar</button>
       </form>
+      <p>
+        ¿No tenés cuenta? <Link to="/Register">Registrate acá</Link>
+      </p>
     </div>
   );
 }
