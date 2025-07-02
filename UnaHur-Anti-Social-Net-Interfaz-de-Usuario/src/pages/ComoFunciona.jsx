@@ -1,16 +1,12 @@
 import React from 'react'
-<<<<<<< HEAD
-import InstructiveCard from '../Componentes/InstructiveCard';
+import InstructiveCard from '../components/InstructiveCard';
 import '../Styles/ComoFunciona.css';
-=======
-import InstructiveCard from '../components/InstructiveCard'
-import '../styles/ComoFunciona.css'
->>>>>>> origin/dev/Franco
+import Footer from "../components/Footer";
 
 function ComoFunciona() {
   return (
     <>
-      <h1>¿Cómo funciona UnaHur - Red Anti-Social?</h1>
+      <h1 className='space'>¿Cómo funciona UnaHur - Red Anti-Social?</h1>
       <hr />
       <InstructiveCard className="instructive-container"
         title="Creá tu identidad (o no)"
@@ -49,6 +45,7 @@ function ComoFunciona() {
         No queremos manipular tu tiempo ni tu atención. Nuestra idea no es que estés más tiempo, sino que el tiempo que estés, lo disfrutes siendo vos mismo.
       </p>
       <h5 className='space'><i>Acá no buscamos viralidad. Buscamos humanidad digital.</i></h5>
+      <Footer />
     </>
   );
 }

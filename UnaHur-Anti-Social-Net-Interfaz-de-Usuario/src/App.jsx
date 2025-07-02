@@ -7,11 +7,7 @@ import Login from "./pages/Login";
 import QuienesSomos from "./pages/QuienesSomos";
 import ComoFunciona from "./pages/ComoFunciona";
 import PostDetail from "./pages/PostDetail";
-<<<<<<< HEAD
 import EquipoDesarrollo from "./pages/EquipoDesarrollo"
-=======
-import EquipoDesarrollo from "./pages/EquipoDesarrollo";
->>>>>>> origin/dev/Franco
 
 function App() {
   return <>

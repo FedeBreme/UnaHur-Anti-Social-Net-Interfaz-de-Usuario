@@ -6,7 +6,7 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  // Al montar: recuperar usuario desde localStorage
+  // Al montar: recuperar usuario completo (con id) desde localStorage
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
@@ -17,8 +17,15 @@ export function AuthProvider({ children }) {
 
   // Guardar usuario completo en localStorage al loguear
   const login = (usuarioData) => {
-    setUsuario(usuarioData);
-    localStorage.setItem('usuario', JSON.stringify(usuarioData));
+    // Aseguramos que se guarda el id, además del nickName y email
+    const usuarioConId = {
+      id: usuarioData.id,
+      nickName: usuarioData.nickName,
+      email: usuarioData.email,
+    };
+
+    setUsuario(usuarioConId);
+    localStorage.setItem('usuario', JSON.stringify(usuarioConId));
   };
 
   // Limpiar sesión

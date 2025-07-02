@@ -36,10 +36,8 @@ const Navbar = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {[
               { path: "/Home", label: "Home" },
-              { path: "/Perfil", label: "Perfil" },
-              { path: "/QuienesSomos", label: "Quiénes Somos" },
-              { path: "/ComoFunciona", label: "Cómo Funciona" },
               { path: "/Login", label: "Login" },
+              { path: "/Perfil", label: "Perfil" }
             ].map((item) => (
               <li className="nav-item" key={item.path}>
                 <NavLink className="nav-link" to={item.path}>

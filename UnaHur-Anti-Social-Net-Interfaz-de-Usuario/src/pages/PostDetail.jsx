@@ -1,16 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import '../Styles/PostDetails.css';
-import VisualAlert from "../Componentes/VisualAlert"; 
-import imagen2 from "../Imagenes/tralaleroTralala.jpg";
-import imagen1 from "../Imagenes/NocheLifeder16.jpg";
-=======
-import '../styles/PostDetails.css';
 import VisualAlert from "../components/VisualAlert"; 
 import imagen2 from "../images/tralaleroTralala.jpg";
 import imagen1 from "../images/NocheLifeder16.jpg";
->>>>>>> origin/dev/Franco
 
 function PostDetail() {
   const { id } = useParams();

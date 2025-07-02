@@ -1,18 +1,10 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import PostCard from "../Componentes/PostCard";
-import VisualAlert from "../Componentes/VisualAlert";
-import imagen1 from "../Imagenes/tralaleroTralala.jpg";
-import imagen2 from "../Imagenes/NocheLifeder16.jpg";
-import '../Styles/Home.css';
-=======
 import PostCard from "../components/PostCard";
 import VisualAlert from "../components/VisualAlert";
 import imagen1 from "../images/tralaleroTralala.jpg";
 import imagen2 from "../images/NocheLifeder16.jpg";
-import '../styles/Home.css';
-import { API_URL } from "../config";
->>>>>>> origin/dev/Franco
+import '../Styles/Home.css';
+import Footer from "../components/Footer";
 
 const imagenesDeMuestra = [imagen1, imagen2];
 
@@ -24,11 +16,7 @@ function Home() {
   useEffect(() => {
     async function traerPosts() {
       try {
-<<<<<<< HEAD
         const respuesta = await fetch("http://localhost:3001/posts");
-=======
-       const respuesta = await fetch(`${API_URL}/posts`);
->>>>>>> origin/dev/Franco
         if (!respuesta.ok) {
           throw new Error("Error al cargar posts");
         }
@@ -54,7 +42,7 @@ function Home() {
 
   return (
     <>
-      <h1>Home</h1>
+      <h1 className='space'>Home</h1>
       <hr />
       <div className="filtro-container">
         <input
@@ -87,16 +75,13 @@ function Home() {
           );
         })}
       </div>
+      <Footer />
     </>
   );
 }
 
-<<<<<<< HEAD
 export default Home;
 
 
 
 
-=======
-export default Home;
->>>>>>> origin/dev/Franco
