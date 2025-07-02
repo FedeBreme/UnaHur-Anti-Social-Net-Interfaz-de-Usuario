@@ -1,13 +1,16 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import '../Styles/PostDetails.css';
 import imagen2 from "../Imagenes/tralaleroTralala.jpg";
 import imagen1 from "../Imagenes/NocheLifeder16.jpg";
+import { UserContext } from "../context/UserContext"; 
 
 function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
+  const [newComment, setNewComment] = useState(""); // Nuevo estado para comentario
+  const { user } = useContext(UserContext); // Usuario logueado desde contexto
 
   const imagenes = [imagen1, imagen2];
 
@@ -27,6 +30,34 @@ function PostDetail() {
 
     cargarPost();
   }, [id]);
+
+  // Función para enviar comentario
+  async function manejarEnvioComentario(e) {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+
+    try {
+      await fetch("http://localhost:3001/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId: post.id,
+          userId: user.id,
+          text: newComment,
+        }),
+      });
+      setNewComment("");
+
+      // Recargar comentarios del post actualizado
+      const res = await fetch(`http://localhost:3001/posts/${id}`);
+      const updatedPost = await res.json();
+      setPost(updatedPost);
+    } catch (err) {
+      alert("Error al enviar comentario");
+    }
+  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -71,6 +102,41 @@ function PostDetail() {
           ) : (
             <p>No hay comentarios aún.</p>
           )}
+
+          {/* Formulario de comentario */}
+          {user ? (
+            <form onSubmit={manejarEnvioComentario} style={{ marginTop: "1rem" }}>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Escribí un comentario..."
+                required
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  resize: "vertical",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  marginTop: "0.5rem",
+                  padding: "8px 16px",
+                  backgroundColor: "#0077cc",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                Agregar comentario
+              </button>
+            </form>
+          ) : (
+            <p>Iniciá sesión para comentar.</p>
+          )}
         </div>
       </div>
     </div>
@@ -78,6 +144,5 @@ function PostDetail() {
 }
 
 export default PostDetail;
-
 
 
