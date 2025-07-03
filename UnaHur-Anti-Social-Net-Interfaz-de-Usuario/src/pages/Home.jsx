@@ -1,49 +1,74 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import PostCard from "../components/PostCard";
 import VisualAlert from "../components/VisualAlert";
-import imagen1 from "../images/tralaleroTralala.jpg";
-import imagen2 from "../images/NocheLifeder16.jpg";
-import '../Styles/Home.css';
+import imagenMuestra from "../images/paisajeParaEstilo.jpeg";
+import "../Styles/Home.css";
 import Footer from "../components/Footer";
 
-const imagenesDeMuestra = [imagen1, imagen2];
+const imagenesDeMuestra = [imagenMuestra];
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [filtro, setFiltro] = useState("");
 
-  useEffect(() => {
-    async function traerPosts() {
-      try {
-        const respuesta = await fetch("http://localhost:3001/posts");
-        if (!respuesta.ok) {
-          throw new Error("Error al cargar posts");
-        }
-        const data = await respuesta.json();
-        setPosts(data);
-      } catch (error) {
-        setError("No se pudieron cargar los posts. " + error.message);
-      }
-    }
+  const navigate = useNavigate(); 
 
-    traerPosts();
+  useEffect(() => {
+    const cargarPosts = async () => {
+      try {
+        const respuestaPosts = await fetch("http://localhost:3001/posts");
+        if (!respuestaPosts.ok) {
+          throw new Error("Error al cargar los posts");
+        }
+        const postsData = await respuestaPosts.json();
+
+        const postsConComentarios = await Promise.all(
+          postsData.map(async (post) => {
+            try {
+              const respuestaComments = await fetch(
+                `http://localhost:3001/comments/post/${post.id}`
+              );
+              if (!respuestaComments.ok) {
+                return { ...post, commentCount: 0 };
+              }
+              const commentsData = await respuestaComments.json();
+              return { ...post, commentCount: commentsData.length };
+            } catch (error) {
+              return { ...post, commentCount: 0 + error};
+            }
+          })
+        );
+
+        setPosts(postsConComentarios);
+        setError(null);
+      } catch (error) {
+        setError("No se pudieron cargar los posts: " + error.message);
+      }
+    };
+
+    cargarPosts();
   }, []);
 
   const postsFiltrados = posts.filter((post) => {
     if (filtro.trim() === "") return true;
     if (!post.Tags) return false;
+
     return post.Tags.some((tag) =>
       tag.name.toLowerCase().includes(filtro.toLowerCase())
     );
   });
 
-  let imagenIndex = 0;
+  const irANuevaPublicacion = () => {
+    navigate("/NuevaPublicacion"); 
+  };
 
   return (
     <>
-      <h1 className='space'>Home</h1>
+      <h1 className="space">Home</h1>
       <hr />
+
       <div className="filtro-container">
         <input
           className="filtro-input"
@@ -52,35 +77,47 @@ function Home() {
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
+        <button onClick={irANuevaPublicacion} className="btn btn-primary btn-publicacion" type="button">
+          Nueva Publicación
+        </button>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
         {error && <VisualAlert mensaje={error} />}
 
-        {postsFiltrados.map((post) => {
-          const imagenActual = imagenesDeMuestra[imagenIndex];
-          imagenIndex = (imagenIndex + 1) % imagenesDeMuestra.length;
+        {!error && postsFiltrados.length === 0 && (
+          <p>No se encontraron posts que coincidan con el filtro.</p>
+        )}
 
-          return (
-            <PostCard
-              key={post.id}
-              postId={post.id}
-              title={post.title}
-              image={imagenActual}
-              description={post.description}
-              tags={post.Tags?.map((tag) => tag.name) || []}
-              commentCount={post.Comments?.length || 0}
-              userName={post.User?.nickName}
-            />
-          );
-        })}
+        {postsFiltrados.map((post, index) => (
+          <PostCard
+            key={post.id}
+            postId={post.id}
+            title={post.title}
+            image={imagenesDeMuestra[index % imagenesDeMuestra.length]}
+            description={post.description}
+            tags={post.Tags?.map((tag) => tag.name) || []}
+            commentCount={post.commentCount || 0}
+            userName={post.User?.nickName || "Usuario desconocido"}
+          />
+        ))}
       </div>
+
       <Footer />
     </>
   );
 }
 
 export default Home;
+
+
 
 
 

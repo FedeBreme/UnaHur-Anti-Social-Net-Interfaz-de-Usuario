@@ -1,36 +1,79 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import '../Styles/PostDetails.css';
-import VisualAlert from "../components/VisualAlert"; 
-import imagen2 from "../images/tralaleroTralala.jpg";
-import imagen1 from "../images/NocheLifeder16.jpg";
+import imagenMuestra from "../images/paisajeParaEstilo.jpeg";
+import { useAuth } from "../context/AuthContext";
 
 function PostDetail() {
   const { id } = useParams();
+  const { usuario } = useAuth();
+
   const [post, setPost] = useState(null);
+  const [comentarios, setComentarios] = useState([]); 
   const [error, setError] = useState(null);
+  const [newComment, setNewComment] = useState("");
 
-  const imagenes = [imagen1, imagen2];
+  const imagenes = [imagenMuestra];
+  const imagen = imagenes[parseInt(id, 10) % imagenes.length];
 
-  useEffect(() => {
-    async function cargarPost() {
-      try {
-        const res = await fetch(`http://localhost:3001/posts/${id}`);
-        if (!res.ok) throw new Error("No se pudo cargar el post");
-        const data = await res.json();
-        setPost(data);
-      } catch (err) {
-        setError(err.message);
-      }
+  const cargarPost = useCallback(async () => {
+    try {
+      const res = await fetch(`http://localhost:3001/posts/${id}`);
+      if (!res.ok) throw new Error("No se pudo cargar el post");
+      const data = await res.json();
+      setPost(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      setPost(null);
     }
-    cargarPost();
   }, [id]);
 
-  if (error) return <VisualAlert mensaje={"Un error inesperado: " + error} />; 
+  const cargarComentarios = useCallback(async () => {
+    try {
+      const res = await fetch(`http://localhost:3001/comments/post/${id}`);
+      if (!res.ok) throw new Error("No se pudieron cargar los comentarios");
+      const data = await res.json();
+      setComentarios(data);
+    } catch (err) {
+      console.error("Error cargando comentarios:", err.message);
+    }
+  }, [id]);
 
+  useEffect(() => {
+    cargarPost();
+    cargarComentarios();
+  }, [cargarPost, cargarComentarios]);
+
+  async function manejarEnvioComentario(e) {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+
+    try {
+      const response = await fetch("http://localhost:3001/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postId: id,
+          userId: usuario.id,
+          content: newComment,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error al crear comentario");
+      }
+
+      setNewComment("");
+      await cargarComentarios();
+    } catch (error) {
+      alert("Error al enviar comentario: " + error.message);
+    }
+  }
+
+  if (error) return <div>Error: {error}</div>;
   if (!post) return <div>Cargando post...</div>;
-
-  const imagen = imagenes[parseInt(id) % imagenes.length];
 
   return (
     <div className="post-container">
@@ -53,17 +96,51 @@ function PostDetail() {
         </div>
 
         <div className="comments-container">
-          <h3>Comentarios ({post.Comments?.length || 0})</h3>
-          {post.Comments?.length > 0 ? (
+          <h3>Comentarios ({comentarios.length})</h3>
+          {comentarios.length > 0 ? (
             <ul>
-              {post.Comments.map((comment) => (
+              {comentarios.map((comment) => (
                 <li key={comment.id}>
-                  <b>{comment.nickName || "Anónimo"}:</b> {comment.text}
+                  <b>{comment.User?.nickName || "Anónimo"}:</b> {comment.content}
                 </li>
               ))}
             </ul>
           ) : (
             <p>No hay comentarios aún.</p>
+          )}
+
+          {usuario ? (
+            <form onSubmit={manejarEnvioComentario} style={{ marginTop: "1rem" }}>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Escribí un comentario..."
+                required
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  resize: "vertical",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  marginTop: "0.5rem",
+                  padding: "8px 16px",
+                  backgroundColor: "#0077cc",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                Agregar comentario
+              </button>
+            </form>
+          ) : (
+            <p>Iniciá sesión para comentar.</p>
           )}
         </div>
       </div>

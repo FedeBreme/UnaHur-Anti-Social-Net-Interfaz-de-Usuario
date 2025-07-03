@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import '../styles/Perfil.css';
-import '../styles/VisualAlert.css';
+import "../styles/Perfil.css";
+import "../styles/VisualAlert.css";
 import VisualAlert from "../components/VisualAlert";
 import PostCard from "../components/PostCard";
 import imagenFija from "../images/default.png";
@@ -24,29 +24,51 @@ function Perfil() {
       return;
     }
 
-    const obtenerPostsDelUsuario = async () => {
+    const cargarPosts = async () => {
       try {
-        const respuesta = await fetch("http://localhost:3001/posts");
-
-        if (!respuesta.ok) {
+        const respuestaPosts = await fetch("http://localhost:3001/posts");
+        if (!respuestaPosts.ok) {
           throw new Error("No se pudieron cargar los posts");
         }
 
-        const todosLosPosts = await respuesta.json();
+        const postsData = await respuestaPosts.json();
 
-        const postsDelUsuario = todosLosPosts.filter(post =>
-          String(post.UserId) === String(usuario.id)
+        // Filtrar por los posts del usuario actual
+        const postsUsuario = postsData.filter(
+          (post) => String(post.UserId) === String(usuario.id)
         );
 
-        setPosts(postsDelUsuario);
-      } catch (err) {
-        setError("No se pudieron cargar los posts. " + err.message);
+        // Para cada post, obtener los comentarios
+        const postsConComentarios = await Promise.all(
+          postsUsuario.map(async (post) => {
+            try {
+              const respuestaComments = await fetch(
+                `http://localhost:3001/comments/post/${post.id}`
+              );
+
+              if (!respuestaComments.ok) {
+                return { ...post, commentCount: 0 };
+              }
+
+              const commentsData = await respuestaComments.json();
+              return { ...post, commentCount: commentsData.length };
+            } catch (error) {
+              console.error("Error al traer comentarios:", error);
+              return { ...post, commentCount: 0 };
+            }
+          })
+        );
+
+        setPosts(postsConComentarios);
+        setError(null);
+      } catch (error) {
+        setError("No se pudieron cargar los posts: " + error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    obtenerPostsDelUsuario();
+    cargarPosts();
   }, [usuario, navigate]);
 
   const handleLogout = () => {
@@ -55,12 +77,12 @@ function Perfil() {
   };
 
   if (usuario === undefined || loading) {
-    return <p>Cargando perfil...</p>;
+    return <p className="cargando">Cargando perfil...</p>;
   }
 
   return (
     <>
-      <div className="container mt-4">
+      <div className="container mt-4 container-posts-usuario">
         <h2 className="space">Bienvenid@, {usuario?.nickName}</h2>
         <hr />
         <button className="btn btn-danger" onClick={handleLogout}>
@@ -70,16 +92,16 @@ function Perfil() {
         {error && <VisualAlert mensaje={error} />}
         {!error && posts.length === 0 && <p>No publicaste nada todavía.</p>}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {posts.map(post => (
+        <div className="contenedor-posts-usuario">
+          {posts.map((post) => (
             <PostCard
               key={post.id}
               postId={post.id}
               title={post.title}
               image={imagenFija}
               description={post.description}
-              tags={post.Tags?.map(tag => tag.name) || []}
-              commentCount={post.Comments?.length || 0}
+              tags={post.Tags?.map((tag) => tag.name) || []}
+              commentCount={post.commentCount || 0}
               userName={usuario.nickName}
             />
           ))}
@@ -91,3 +113,4 @@ function Perfil() {
 }
 
 export default Perfil;
+
