@@ -1,0 +1,27 @@
+.banner-bienvenida {
+  background-color: #f0f8ff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  animation: fadeIn 1s ease;
+}
+
+/* === Modo claro === */
+body.modo-claro .banner-bienvenida {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #000;
+}
+
+/* === Modo oscuro === */
+body.modo-oscuro .banner-bienvenida {
+  background-color: rgba(34, 34, 34, 0.95);
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

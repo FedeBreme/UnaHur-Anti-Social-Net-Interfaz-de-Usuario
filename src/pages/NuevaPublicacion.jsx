@@ -53,7 +53,7 @@ function NuevaPublicacion() {
 
     try {
       // Crear post
-      const resPost = await fetch("http://localhost:3001/posts", {
+      const resPost = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -71,7 +71,7 @@ function NuevaPublicacion() {
       // Enviar imágenes si hay
       const urlsFiltradas = imageUrls.filter((url) => url.trim() !== "");
       for (let url of urlsFiltradas) {
-        await fetch("http://localhost:3001/postimages", {
+        await fetch(`${API_URL}/postimages`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

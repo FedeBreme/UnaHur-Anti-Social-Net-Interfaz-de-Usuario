@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate  } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+//IMAGES
 import logoUnaHur from "../images/LogoUnaHurAnti-SocialNet.png";
+//CSS
 import '../styles/Navbar.css'
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("modo") === "oscuro";
   });
+
+  const { usuario,logout  } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.className = darkMode ? "modo-oscuro" : "modo-claro";
@@ -36,8 +42,6 @@ const Navbar = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             {[
               { path: "/Home", label: "Home" },
-              { path: "/Login", label: "Login" },
-              { path: "/Perfil", label: "Perfil" }
             ].map((item) => (
               <li className="nav-item" key={item.path}>
                 <NavLink className="nav-link" to={item.path}>
@@ -45,8 +49,31 @@ const Navbar = () => {
                 </NavLink>
               </li>
             ))}
+            {!usuario && (
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/Login">
+                    Login
+                  </NavLink>
+                </li>
+              )}
+            {usuario && (
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/Perfil">
+                    Perfil - {usuario.nickName}
+                  </NavLink>
+                </li>
+              )}
           </ul>
-
+            {usuario && (
+          <button
+            className="btn btn-outline-danger btn-sm me-2"
+            onClick={() =>{
+              logout();
+              navigate("/Home")}}
+          >
+            Cerrar sesión
+          </button>
+          )}
           <button
             className={`btn btn-sm ${darkMode ? "btn-light" : "btn-dark"} me-3`}
             onClick={() => setDarkMode(!darkMode)}

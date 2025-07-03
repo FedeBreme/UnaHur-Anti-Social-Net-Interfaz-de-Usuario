@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 //COMPONENTS 
 import PostCard from "../components/PostCard";
 import VisualAlert from "../components/VisualAlert";
 import Footer from "../components/Footer";
+import BannerBienvenida from "../components/BannerBienvenida";
 //IMAGES
 import imagenMuestra from "../images/paisajeParaEstilo.jpeg";
 //CSS
@@ -18,6 +20,8 @@ function Home() {
   const [error, setError] = useState(null);
   const [filtro, setFiltro] = useState("");
 
+  const { usuario } = useAuth();
+
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -29,24 +33,35 @@ function Home() {
         }
         const postsData = await respuestaPosts.json();
 
-        const postsConComentarios = await Promise.all(
+        const postsConDatos = await Promise.all(
           postsData.map(async (post) => {
+            let commentCount = 0;
             try {
-              const respuestaComments = await fetch(
-                `http://localhost:3001/comments/post/${post.id}`
-              );
-              if (!respuestaComments.ok) {
-                return { ...post, commentCount: 0 };
+              const respuestaComments = await fetch(`${API_URL}/comments/post/${post.id}`);
+              if (respuestaComments.ok) {
+                const commentsData = await respuestaComments.json();
+                commentCount = commentsData.length;
               }
-              const commentsData = await respuestaComments.json();
-              return { ...post, commentCount: commentsData.length };
-            } catch (error) {
-              return { ...post, commentCount: 0 + error};
-            }
+            } catch {}
+
+            let imagenes = [];
+            try {
+              const respuestaImagenes = await fetch(`${API_URL}/postimages/post/${post.id}`);
+              if (respuestaImagenes.ok) {
+                imagenes = await respuestaImagenes.json();
+              }
+            } catch {}
+
+            return {
+              ...post,
+              commentCount,
+              PostImages: imagenes,
+            };
           })
         );
-
-        setPosts(postsConComentarios);
+        
+        postsConDatos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setPosts(postsConDatos);
         setError(null);
       } catch (error) {
         setError("No se pudieron cargar los posts: " + error.message);
@@ -73,7 +88,7 @@ function Home() {
     <>
       <h1 className="space">Home</h1>
       <hr />
-
+      {!usuario && <BannerBienvenida />}
       <div className="filtro-container">
         <input
           className="filtro-input"
@@ -106,7 +121,7 @@ function Home() {
             key={post.id}
             postId={post.id}
             title={post.title}
-            image={imagenesDeMuestra[index % imagenesDeMuestra.length]}
+            image={post.PostImages?.[0]?.url || imagenesDeMuestra}
             description={post.description}
             tags={post.Tags?.map((tag) => tag.name) || []}
             commentCount={post.commentCount || 0}

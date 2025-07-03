@@ -46,21 +46,33 @@ function Perfil() {
         // Para cada post, obtener los comentarios
         const postsConComentarios = await Promise.all(
           postsUsuario.map(async (post) => {
+            let commentCount = 0;
+            let imagenes = [];
+
             try {
-              const respuestaComments = await fetch(
-                `http://localhost:3001/comments/post/${post.id}`
-              );
-
-              if (!respuestaComments.ok) {
-                return { ...post, commentCount: 0 };
+              const respuestaComments = await fetch(`${API_URL}/comments/post/${post.id}`);
+              if (respuestaComments.ok) {
+                const commentsData = await respuestaComments.json();
+                commentCount = commentsData.length;
               }
-
-              const commentsData = await respuestaComments.json();
-              return { ...post, commentCount: commentsData.length };
             } catch (error) {
               console.error("Error al traer comentarios:", error);
-              return { ...post, commentCount: 0 };
             }
+
+            try {
+              const respuestaImagenes = await fetch(`${API_URL}/postimages/post/${post.id}`);
+              if (respuestaImagenes.ok) {
+                imagenes = await respuestaImagenes.json();
+              }
+            } catch (error) {
+              console.error("Error al traer imágenes:", error);
+            }
+
+            return {
+              ...post,
+              commentCount,
+              PostImages: imagenes,
+            };
           })
         );
 
@@ -90,9 +102,6 @@ function Perfil() {
       <div className="container mt-4 container-posts-usuario">
         <h2 className="space">Bienvenid@, {usuario?.nickName}</h2>
         <hr />
-        <button className="btn btn-danger" onClick={handleLogout}>
-          Cerrar sesión
-        </button>
 
         {error && <VisualAlert mensaje={error} />}
         {!error && posts.length === 0 && <p>No publicaste nada todavía.</p>}
@@ -103,7 +112,7 @@ function Perfil() {
               key={post.id}
               postId={post.id}
               title={post.title}
-              image={imagenFija}
+              image={post.PostImages?.[0]?.url || imagenFija}
               description={post.description}
               tags={post.Tags?.map((tag) => tag.name) || []}
               commentCount={post.commentCount || 0}

@@ -1,3 +1,4 @@
+//CSS
 import '../styles/VisualAlert.css';
 
 function VisualAlert({ mensaje }) {

@@ -16,8 +16,9 @@ function PostDetail() {
   const [comentarios, setComentarios] = useState([]); 
   const [error, setError] = useState(null);
   const [newComment, setNewComment] = useState("");
+  //
+  const [imagenes, setImagenes] = useState([]);
 
-  const imagenes = [imagenMuestra];
   const imagen = imagenes[parseInt(id, 10) % imagenes.length];
 
   const cargarPost = useCallback(async () => {
@@ -25,17 +26,24 @@ function PostDetail() {
       const res = await fetch(`${API_URL}/posts/${id}`);
       if (!res.ok) throw new Error("No se pudo cargar el post");
       const data = await res.json();
+
+      const resImgs = await fetch(`${API_URL}/postimages/post/${id}`);
+      const imagenesData = resImgs.ok ? await resImgs.json() : [];
+
       setPost(data);
+      setImagenes(imagenesData);
       setError(null);
     } catch (err) {
       setError(err.message);
       setPost(null);
+      
+      setImagenes([]);
     }
   }, [id]);
 
   const cargarComentarios = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:3001/comments/post/${id}`);
+      const res = await fetch(`${API_URL}/comments/post/${id}`);
       if (!res.ok) throw new Error("No se pudieron cargar los comentarios");
       const data = await res.json();
       setComentarios(data);
@@ -54,7 +62,7 @@ function PostDetail() {
     if (!newComment.trim()) return;
 
     try {
-      const response = await fetch("http://localhost:3001/comments", {
+      const response = await fetch(`${API_URL}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,7 +97,11 @@ function PostDetail() {
       <p className="post-description">{post.description}</p>
 
       <div className="image-post">
-        <img className="image-style" src={imagen} alt="Imagen del post" />
+        <img
+          className="image-style"
+          src={imagenes[0]?.url || imagenMuestra}
+          alt="Imagen del post"
+        />
       </div>
 
       <div className="right-section">

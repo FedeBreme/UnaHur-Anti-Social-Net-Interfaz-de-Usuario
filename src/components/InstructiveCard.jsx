@@ -1,3 +1,4 @@
+//CSS
 import '../styles/InstructiveCard.css'
 
 const InstructiveCard = ({ title, description }) => {
