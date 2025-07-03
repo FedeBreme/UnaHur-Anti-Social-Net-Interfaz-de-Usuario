@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import '../styles/PostCard.css'
+import '../styles/PostCard.css';
 
 const PostCard = ({ title, image, description, tags, commentCount, postId, userName }) => {
   return (

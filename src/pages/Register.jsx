@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+//COMPONENTS
+import Footer from "../components/Footer";
+//CSS
 import "../styles/Register.css";
+//CONEXION API
 import { API_URL } from "../config";
 
 
@@ -75,7 +79,9 @@ function Register() {
         {mensaje && <p style={{ color: "green" }}>{mensaje}</p>}
         <button type="submit">Registrarse</button>
       </form>
-    </div>
+      <Footer />
+    </div> 
+    
   );
 }
 

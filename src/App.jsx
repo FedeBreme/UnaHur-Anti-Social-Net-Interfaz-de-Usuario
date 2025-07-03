@@ -7,7 +7,8 @@ import Login from "./pages/Login";
 import QuienesSomos from "./pages/QuienesSomos";
 import ComoFunciona from "./pages/ComoFunciona";
 import PostDetail from "./pages/PostDetail";
-import EquipoDesarrollo from "./pages/EquipoDesarrollo";
+import EquipoDesarrollo from "./pages/EquipoDesarrollo"
+import NuevaPublicacion from "./pages/NuevaPublicacion"; 
 import Register from "./pages/Register"
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/ComoFunciona" element={ <ComoFunciona/> }/>
       <Route path="/post/:id" element={ <PostDetail />} />
       <Route path="/EquipoDesarrollo" element={ <EquipoDesarrollo />} />
+      <Route path="/NuevaPublicacion" element={<NuevaPublicacion />} />
     </Routes>
   </>
 }

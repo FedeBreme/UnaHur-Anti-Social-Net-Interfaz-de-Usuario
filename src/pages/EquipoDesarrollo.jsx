@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+//CSS
 import '../styles/EquipoDesarrollo.css';
+//IMAGENES
 import Federico from '../images/Federico.png';
 import Tomas from '../images/Tomas.jpeg';
+import Franco from '../images/Franco.jpeg';
+import Footer from "../components/Footer";
 
 
 function EquipoDesarrollo() {
@@ -11,7 +15,7 @@ function EquipoDesarrollo() {
 
   return (
     <>
-      <h1>Nuestro equipo de desarrollo</h1>
+      <h1 className='space'>Nuestro equipo de desarrollo</h1>
       <hr />
       <p>
         Detrás de <i>UnaHur - Red Anti-Social</i> hay un grupo de estudiantes comprometidos que combinaron creatividad,
@@ -34,9 +38,9 @@ function EquipoDesarrollo() {
         </div>
 
         <div className="card" style={{ width: "20rem" }}>
-          <img src="" className="card-img-top" alt="Franco" />
+          <img src={Franco} className="card-img-top" alt="Franco" />
           <div className="card-body">
-            <h5 className="card-title">Franco Pfahler</h5>
+            <h5 className="card-title">Franco Pfahel</h5>
             <p className="card-text">Desarrollador BackEnd</p>
             <button onClick={() => setFrancoActivo(!francoActivo)} className="ver-mas">
               {francoActivo ? 'Ocultar descripción' : 'Ver más'}
@@ -61,6 +65,7 @@ function EquipoDesarrollo() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

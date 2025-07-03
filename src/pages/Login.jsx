@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link  } from "react-router-dom";
+//CSS
 import "../styles/Login.css";
+//COMPONENTS
+import Footer from "../components/Footer";
+//CONEXION API
 import { API_URL} from "../config";
 
 function Login() {
@@ -72,6 +76,7 @@ function Login() {
       <p>
         ¿No tenés cuenta? <Link to="/Register">Registrate acá</Link>
       </p>
+      <Footer />
     </div>
   );
 }
