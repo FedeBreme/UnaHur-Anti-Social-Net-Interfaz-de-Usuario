@@ -1,0 +1,15 @@
+.filtro-container {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.filtro-input {
+  padding: 0.5rem;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.btn-publicacion {
+  margin-left: 1rem;
+}

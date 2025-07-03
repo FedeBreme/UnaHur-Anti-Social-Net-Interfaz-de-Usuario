@@ -1,0 +1,14 @@
+.instructive-card {
+  box-shadow: 0 12px 12px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  width: 100%;           
+}
+
+.instructive-card:hover {
+  background-color: #27818d;
+  padding: 3rem;
+  border: 6px solid #3bad67;
+  border-radius: 2rem;
+  transition: 0.3s ease;
+  color: rgb(255, 255, 255)
+}
